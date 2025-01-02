@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test</title>
+    </head>
+    
+    <body>
+        <form id="here" onsubmit="return false">
+            <input type="file" name="you" accept="image/png, image/jpeg" enctype="multipart/form-data">
+            <input type="submit">
+        </form>
+        {% if model_result %}
+            <h1>u r {{model_result}} </h1>
+        {% endif %}
+        <h1 id="model_result"></h1>
+    <script>
+            document.addEventListener("DOMContentLoaded", function(event) { //wait for image to load
+                var test=document.querySelector('form');
+                
+                test.addEventListener("submit", function(event) {
+                    fetch('/model_say', {
+                    method: 'POST',
+                    body: new FormData(document.querySelector('form'))
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("model_result").innerHTML = JSON.stringify(data["result"]);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                return false;
+                })
+            });
+    </script>
+    </body>
+</html>
